@@ -9,7 +9,7 @@ from os import path
 from device import Device
 from loguru import logger
 from locationsharinglib import Service
-from cookieshandler import CookiesHandler
+import cookieshandler
 from locationsharinglib.locationsharinglibexceptions import InvalidCookies
 
 
@@ -20,7 +20,7 @@ update_interval = os.getenv("UPDATE_INTERVAL")
 DEVICES = []
 CONFIG_PATH = 'config/devices.yaml'
 TB_SERVER_ADDRESS= os.getenv("TB_SERVER_ADDRESS")
-cookieshandler = CookiesHandler()
+cookieshandler.run()
 
 def load_devices():
     try:
@@ -38,6 +38,7 @@ def load_devices():
 
 
 try:
+    cookieshandler.parseCookieFile(cookies_file)
     service = Service(cookies_file=cookies_file, authenticating_account=google_email)
 except InvalidCookies:
     logger.error(
@@ -70,13 +71,13 @@ def run():
             send_telemetry(access_token=matched_device.access_token,payload=payload)
     
 def refresh_coockies():
-    cookieshandler.refresh()
+    cookieshandler.parseCookieFile(cookies_file)
     
 
 if __name__ == "__main__":
     load_devices()
     schedule.every(int(update_interval)).minutes.do(run)
-    # schedule.every(15).minutes.do(refresh_coockies)
+    schedule.every(32).minutes.do(refresh_coockies)
     
     while True:
         schedule.run_pending()
