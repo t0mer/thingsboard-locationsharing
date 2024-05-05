@@ -1,0 +1,16 @@
+version: "3.6"
+services:
+  locationsharing:
+    image: techblog/locationsharing
+    container_name: locationsharing
+    restart: always
+    environment:
+      - EMAIL_ADDRESS= #Google account email
+      - COOKIES_FILE_NAME= #Cookies file name (File name without path)
+      - MQTT_BROKER_ADDRESS= #MQTT Host address
+      - MQTT_BROKER_PORT= #MQTT Port ,Default is 1883
+      - MQTT_BROKER_USER= #MQTT Username
+      - MQTT_BROKER_PASSWORD= #MQTT Password
+      - UPDATE_INTERVAL=1 #In minutes
+    volumes:
+      - ./locationsharing/cookies:/app/cookies
