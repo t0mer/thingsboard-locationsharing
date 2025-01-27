@@ -1,4 +1,4 @@
-FROM ubuntu:24.10
+FROM ubuntu:latest
 
 LABEL maintainer="tomer.klein@gmail.com"
 
